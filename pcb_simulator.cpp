@@ -13,7 +13,7 @@ struct PCB
     std::string state;
     int pc;
     int total_work;
-    // TODO: Add constructor PCB - DONE?
+    // TODO: Add constructor PCB - DONE
     PCB(int pid, int total_work) //Constructor. I am assuming the other values are not needed to be declared in the constructor
     {
         this->pid = pid;
@@ -40,7 +40,6 @@ void printProcessStates(const std::vector<PCB>& pcbs, int timeSlice)
 // Kernel simulator (YOU MUST IMPLEMENT THIS)
 void kernelSimulator(std::vector<PCB>& pcbs, int timeQuantum) 
 {
-    //Ed's Notes
     //Insert all pcbs in the vector into a queue
     std::queue<PCB*> readyQueue;
     for (PCB& pcb : pcbs) //For each PCB object in the vector
@@ -61,7 +60,6 @@ void kernelSimulator(std::vector<PCB>& pcbs, int timeQuantum)
         {
             readyQueue.front()->pc = readyQueue.front()->total_work; //Sets pc to the total work so it doesn't exceed it
             readyQueue.front()->state = "Terminated"; //Sets value to terminated since it is done
-            readyQueue.pop();
             
         }
 
@@ -70,28 +68,19 @@ void kernelSimulator(std::vector<PCB>& pcbs, int timeQuantum)
         interruptCount++;
 
         //Move the process to the back of the queue if not complete & start from the top
-        if (!readyQueue.empty() && readyQueue.front()->state != "Terminated")
+        if (!readyQueue.empty() && readyQueue.front()->state == "Terminated")
+        {
+            readyQueue.pop(); //Removes the front of the queue if it is terminated
+        }
+        
+        else if (!readyQueue.empty() && readyQueue.front()->state != "Terminated")
         {
             readyQueue.front()->state = "Ready"; //Sets state back to ready
             PCB* temp = readyQueue.front(); //Temporary variable to hold the front of the queue
             readyQueue.pop(); //Removes the front of the queue
             readyQueue.push(temp); //Adds the process to the back of the queue
         }
-
     }
-
-
-    //Implement scheduling as decribed in the project 1 description
-        /*
-        - Processes are placed in a ready queue. - Done?
-        - The first process in the queue gets to run for the time quantum (e.g., 2 units).
-        - If the process finishes within the time quantum, it’s done and removed from the queue.
-        - If it’s not finished, it’s moved to the back of the queue, and the next process runs.
-        - This repeats until all processes are complete. - Done?
-        */
-    //For each timed interrupt call printProcessStates - D
-    //You may create helper functions as needed
-    //Add comments to describe your implementation of this function and/or other helper functions
 }
 
 

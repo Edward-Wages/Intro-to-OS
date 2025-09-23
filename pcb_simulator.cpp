@@ -45,14 +45,39 @@ void kernelSimulator(std::vector<PCB>& pcbs, int timeQuantum)
     std::queue<PCB*> readyQueue;
     for (PCB& pcb : pcbs) //For each PCB object in the vector
     {
-        pcb.state = "READY"; //Assigns state to ready
+        pcb.state = "Ready"; //Assigns state to ready
         pcb.pc = 0; //Sets program counter to 0
         readyQueue.push(&pcb); //Adds the pcb to the queue
     }
 
+    int interruptCount = 1; //Will be needed to keep count of which interrupt we are outputting
     while (!readyQueue.empty()) //Main loop for the schedulinng
     {
+        readyQueue.front()->state = "Running";
+        readyQueue.front()->pc += timeQuantum;
         
+        //If the process is complete (pc >= total_work), label it as terminated & remove it from the queue
+        if (readyQueue.front()->pc >= readyQueue.front()->total_work)
+        {
+            readyQueue.front()->pc = readyQueue.front()->total_work; //Sets pc to the total work so it doesn't exceed it
+            readyQueue.front()->state = "Terminated"; //Sets value to terminated since it is done
+            readyQueue.pop();
+            
+        }
+
+        //When the time quantom is up, print the process states
+        printProcessStates(pcbs, interruptCount);
+        interruptCount++;
+
+        //Move the process to the back of the queue if not complete & start from the top
+        if (!readyQueue.empty() && readyQueue.front()->state != "Terminated")
+        {
+            readyQueue.front()->state = "Ready"; //Sets state back to ready
+            PCB* temp = readyQueue.front(); //Temporary variable to hold the front of the queue
+            readyQueue.pop(); //Removes the front of the queue
+            readyQueue.push(temp); //Adds the process to the back of the queue
+        }
+
     }
 
 
@@ -62,9 +87,9 @@ void kernelSimulator(std::vector<PCB>& pcbs, int timeQuantum)
         - The first process in the queue gets to run for the time quantum (e.g., 2 units).
         - If the process finishes within the time quantum, it’s done and removed from the queue.
         - If it’s not finished, it’s moved to the back of the queue, and the next process runs.
-        - This repeats until all processes are complete.
+        - This repeats until all processes are complete. - Done?
         */
-    //For each timed interrupt call printProcessStates
+    //For each timed interrupt call printProcessStates - D
     //You may create helper functions as needed
     //Add comments to describe your implementation of this function and/or other helper functions
 }

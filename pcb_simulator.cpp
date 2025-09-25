@@ -4,13 +4,14 @@
 #include <set>
 #include <string>
 #include <algorithm>
+using namespace std;
 
 // Define the PCB structure (YOU MUST IMPLEMENT THIS)
 struct PCB 
 {
     // TODO: Add fields: pid, state, pc, total_work - DONE
     int pid;
-    std::string state;
+    string state;
     int pc;
     int total_work;
     // TODO: Add constructor PCB - DONE
@@ -24,24 +25,25 @@ struct PCB
 // Print states of all processes, sorted by PID (PROVIDED - DO NOT MODIFY)
 void printProcessStates(const std::vector<PCB>& pcbs, int timeSlice) 
 {
-    std::cout << "Interrupt " << timeSlice << ":" << std::endl;
-    std::vector<PCB> sorted_pcbs = pcbs;
-    std::sort(sorted_pcbs.begin(), sorted_pcbs.end(), 
+    cout << "Interrupt " << timeSlice << ":" << endl;
+    vector<PCB> sorted_pcbs = pcbs;
+    sort(sorted_pcbs.begin(), sorted_pcbs.end(), 
               [](const PCB& a, const PCB& b) 
               { return a.pid < b.pid; 
-            });
+            }
+        );
     for (const PCB& pcb : sorted_pcbs) 
     {
-        std::cout << "PID " << pcb.pid << ": " << pcb.state  << ", at pc " << pcb.pc << std::endl;
+        cout << "PID " << pcb.pid << ": " << pcb.state  << ", at pc " << pcb.pc << endl;
     }
-    std::cout << std::flush;
+    cout << flush;
 }
 
 // Kernel simulator (YOU MUST IMPLEMENT THIS)
-void kernelSimulator(std::vector<PCB>& pcbs, int timeQuantum) 
+void kernelSimulator(vector<PCB>& pcbs, int timeQuantum) 
 {
     //Insert all pcbs in the vector into a queue
-    std::queue<PCB*> readyQueue;
+    queue<PCB*> readyQueue;
     for (PCB& pcb : pcbs) //For each PCB object in the vector
     {
         pcb.state = "Ready"; //Assigns state to ready
@@ -88,35 +90,35 @@ int main()
 {
     // Read from standard input via redirection (PROVIDED)
     int numProcesses;   //The number of PCB objects
-    if (!(std::cin >> numProcesses)) 
+    if (!(cin >> numProcesses)) 
     {
-        std::cerr << "Error: Invalid input for number of processes" << std::endl;
+        cerr << "Error: Invalid input for number of processes" << std::endl;
         return 1;
     }
     if (numProcesses <= 0) 
     {
-        std::cerr << "Error: Invalid number of processes" << std::endl;
+        cerr << "Error: Invalid number of processes" << std::endl;
         return 1;
     }
     
-    std::vector<PCB> pcbs;  //Where we'll keep track of each PCB
-    std::set<int> pids; // Track unique PIDs from the PCB objects?
+    vector<PCB> pcbs;  //Where we'll keep track of each PCB
+    set<int> pids; // Track unique PIDs from the PCB objects?
     for (int i = 0; i < numProcesses; ++i) //For each PCB object
     {
         int pid, work;
-        if (!(std::cin >> pid >> work)) 
+        if (!(cin >> pid >> work)) 
         {
-            std::cerr << "Error: Invalid input format for process data" << std::endl;
+            cerr << "Error: Invalid input format for process data" << std::endl;
             return 1;
         }
         if (work <= 0) 
         {
-            std::cerr << "Error: Invalid work units for PID " << pid << std::endl;
+            cerr << "Error: Invalid work units for PID " << pid << std::endl;
             return 1;
         }
         if (pids.count(pid) > 0) 
         {
-            std::cerr << "Error: Duplicate PID " << pid << " detected" << std::endl;
+            cerr << "Error: Duplicate PID " << pid << " detected" << std::endl;
             return 1;
         }
         // TODO: Add check for unique PIDs (e.g insert pid into the set pids) - Done?
@@ -129,6 +131,6 @@ int main()
     int timeQuantum = 2; //Given time quantum
     kernelSimulator(pcbs, timeQuantum); //Method to Implement
     
-    std::cout << "All processes completed." << std::endl;
+    cout << "All processes completed." << endl;
     return 0;
 }

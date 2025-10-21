@@ -6,15 +6,15 @@
 #include <algorithm>
 using namespace std;
 
-// Define the PCB structure (YOU MUST IMPLEMENT THIS)
+//PCB structure
 struct PCB 
 {
-    // TODO: Add fields: pid, state, pc, total_work - DONE
-    int pid;
-    string state;
-    int pc;
-    int total_work;
-    // TODO: Add constructor PCB - DONE
+    
+    int pid; //Process ID
+    string state; //State of the process (Ready, Running, Terminated)
+    int pc; //Program Counter
+    int total_work; //Total work units required for the process
+    
     PCB(int pid, int total_work) //Constructor. I am assuming the other values are not needed to be declared in the constructor
     {
         this->pid = pid;

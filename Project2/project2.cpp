@@ -231,6 +231,9 @@ void CPU_Scheduler_Simulator(vector<PCB>& processes, int time_quantum)
         // cout << "Average turnaround time: " << avg_turnaround << "\n";
     }
 
+
+    //Printing final stats
+    
     cout << endl; //Buffer line before stats output
     cout << "Turnaround Time" << endl;
     for (const auto& p : finished_processes)
